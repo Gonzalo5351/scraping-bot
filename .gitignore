@@ -1,0 +1,28 @@
+# Entorno virtual
+venv/
+.env
+
+# Archivos compilados de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Archivos de logs y caché
+logs/
+*.log
+
+# Configuración local y credenciales sensibles
+config.py
+instance/
+
+# Base de datos SQLite (si se usa)
+data/*.sqlite3
+data/*.db
+
+# Configuración de herramientas
+pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dependencias
+src/requirements.txt
