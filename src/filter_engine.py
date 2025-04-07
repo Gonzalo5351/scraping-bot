@@ -1,5 +1,6 @@
 import json
 from typing import List, Dict
+import re
 
 class FilterEngine:
     def __init__(self, profile, roadmap):
@@ -19,6 +20,7 @@ class FilterEngine:
         """
         relevant, future = [], []
         for job in jobs:
+            print(json.dumps(job, indent=2, ensure_ascii=False))
             if self._is_relevant(job):
                 relevant.append(job)
             elif self._is_future_opportunity(job):
@@ -51,8 +53,16 @@ class FilterEngine:
 
     def _matches_experience(self, job: Dict) -> bool:
         # Posteriormente se podría mejorar esto con NLP después, pero por ahora va básico.
-        return "junior" in job.get("description", "").lower() or "0-2 years" in job.get("description", "").lower()
-
+        experience_keywords = [
+        "junior", "jr", "0-2 years", "0 a 2 años", "sin experiencia",
+        "entry level", "nivel inicial", "nivel básico", "inicial"
+        ]
+        job_text = job.get("description", "").lower()
+        return any(kw in job_text for kw in experience_keywords)
+    
     def _has_negative_keywords(self, job: Dict) -> bool:
         job_text = job.get("description", "").lower()
-        return any(kw in job_text for kw in self.negative_keywords)
+        for kw in self.negative_keywords:
+            if re.search(rf"\b{re.escape(kw)}\b", job_text):
+                return True
+        return False
