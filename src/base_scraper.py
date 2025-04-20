@@ -2,9 +2,16 @@ from abc import ABC, abstractmethod
 from typing import List, Dict
 import re
 from bs4 import BeautifulSoup
+from logger import get_logger
+
+logger = get_logger("BaseScraper")
 
 
 class BaseScraper(ABC):
+    def __init__(self, base_url: str):
+        self.base_url = base_url
+        logger.info(f"[BaseScraper] Inicializando con URL base: {self.base_url}")
+
     @abstractmethod
     def get_jobs(self) -> List[Dict]:
         """Debe devolver una lista de ofertas laborales."""

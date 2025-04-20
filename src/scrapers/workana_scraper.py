@@ -1,20 +1,22 @@
+from logger import get_logger
 import requests
 import re
 import json
 from typing import List, Dict
 from base_scraper import BaseScraper
 
+logger = get_logger("WorkanaScraper")
+
 
 class WorkanaScraper(BaseScraper):
     def __init__(self):
-        self.url = "https://www.workana.com/jobs?language=es"
+        super().__init__("https://www.workana.com/jobs?language=es")
         self.headers = {"User-Agent": "Mozilla/5.0"}
 
     def get_jobs(self) -> List[Dict]:
-        print(f"Accediendo a {self.url}...")
         try:
-            response = requests.get(self.url, headers=self.headers)
-            print(f"Código de estado HTTP: {response.status_code}")
+            response = requests.get(self.base_url, headers=self.headers)
+            logger.info(f"Código de estado HTTP: {response.status_code}")
             response.raise_for_status()
 
             script_data = re.search(r":results-initials=\'({.+?})\'", response.text)
@@ -41,3 +43,6 @@ class WorkanaScraper(BaseScraper):
         except Exception as e:
             print(f"Error durante la ejecución: {e}")
             return []
+
+
+# AGREGAR EL clean_html
