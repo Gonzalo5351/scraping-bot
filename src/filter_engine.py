@@ -36,14 +36,14 @@ class FilterEngine:
 
     def _is_relevant(self, job: Dict) -> bool:
         return (
-            self._matches_skills(job, self.profile._load_skills())
+            self._matches_skills(job, self.profile.skills_nombres())
             and self._matches_experience(job)
             and not self._has_negative_keywords(job)
         )
 
     def _is_future_opportunity(self, job: Dict) -> bool:
-        roadmap_skills = set(skill.lower() for skill in self.roadmap._load_skills())
-        profile_skills = set(skill.lower() for skill in self.profile._load_skills())
+        roadmap_skills = set(skill.lower() for skill in self.roadmap.list_skills())
+        profile_skills = set(skill.lower() for skill in self.profile.skills_nombres())
         job_words = set(word.lower() for word in job.get("description", "").split())
 
         required = roadmap_skills & job_words
